@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mobil\\OneDrive\\Desktop\\dbms\\dbms\\library.csproj": {}
+    "C:\\Users\\mobil\\OneDrive\\Desktop\\librarymanagement\\library.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mobil\\OneDrive\\Desktop\\dbms\\dbms\\library.csproj": {
+    "C:\\Users\\mobil\\OneDrive\\Desktop\\librarymanagement\\library.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mobil\\OneDrive\\Desktop\\dbms\\dbms\\library.csproj",
+        "projectUniqueName": "C:\\Users\\mobil\\OneDrive\\Desktop\\librarymanagement\\library.csproj",
         "projectName": "library",
-        "projectPath": "C:\\Users\\mobil\\OneDrive\\Desktop\\dbms\\dbms\\library.csproj",
+        "projectPath": "C:\\Users\\mobil\\OneDrive\\Desktop\\librarymanagement\\library.csproj",
         "packagesPath": "C:\\Users\\mobil\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mobil\\OneDrive\\Desktop\\dbms\\dbms\\obj\\",
+        "outputPath": "C:\\Users\\mobil\\OneDrive\\Desktop\\librarymanagement\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
