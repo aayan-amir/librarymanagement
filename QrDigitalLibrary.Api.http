@@ -1,0 +1,74 @@
+@QrDigitalLibrary.Api_HostAddress = http://localhost:5178
+
+POST {{QrDigitalLibrary.Api_HostAddress}}/api/transactions/issue
+Content-Type: application/json
+Accept: application/json
+
+{
+  "universityId": "2024-CS-229",
+  "qrCodeId": "book-001"
+}
+
+###
+
+POST {{QrDigitalLibrary.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "universityId": "2024-CS-229",
+  "password": "student123"
+}
+
+###
+
+POST {{QrDigitalLibrary.Api_HostAddress}}/api/transactions/return
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "qrCodeId": "book-001"
+}
+
+###
+
+GET {{QrDigitalLibrary.Api_HostAddress}}/api/students/2024-CS-229/borrowed-books
+Accept: application/json
+
+###
+
+GET {{QrDigitalLibrary.Api_HostAddress}}/api/students/me/borrowed-books
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{QrDigitalLibrary.Api_HostAddress}}/api/students/2024-CS-229/transactions
+Accept: application/json
+
+###
+
+GET {{QrDigitalLibrary.Api_HostAddress}}/api/students/me/fines
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{QrDigitalLibrary.Api_HostAddress}}/api/students/me/notifications
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{QrDigitalLibrary.Api_HostAddress}}/api/students/me/recommendations
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{QrDigitalLibrary.Api_HostAddress}}/api/admin/dashboard/summary
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+###

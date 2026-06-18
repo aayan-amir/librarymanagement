@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QR Digital Library</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="app">
+        <header class="app-header">
+            <a class="brand" href="#issue" aria-label="Digital Library home">
+                <span class="brand-mark">QR</span>
+                <span>Digital Library</span>
+            </a>
+
+            <nav id="mainNav" class="hidden" aria-label="Library navigation">
+                <button class="nav-link active" type="button" data-view="issue">Issue</button>
+                <button class="nav-link" type="button" data-view="return">Return</button>
+                <button class="nav-link" type="button" data-view="books">Books</button>
+                <button class="nav-link" type="button" data-view="history">History</button>
+                <button class="nav-link" type="button" data-view="fines">Fines</button>
+                <button class="nav-link" type="button" data-view="recommendations">Recommend</button>
+                <button id="adminNav" class="nav-link hidden" type="button" data-view="admin">Admin</button>
+            </nav>
+
+            <button id="signOutButton" class="text-button hidden" type="button">Sign out</button>
+        </header>
+
+        <main>
+            <section id="loginView" class="login-view">
+                <div class="login-card">
+                    <p class="eyebrow">Student and Staff Access</p>
+                    <h1>QR circulation, fines, analytics, and recommendations.</h1>
+
+                    <div class="auth-tabs">
+                        <button id="loginTab" class="auth-tab active" type="button">Login</button>
+                        <button id="registerTab" class="auth-tab" type="button">Register</button>
+                    </div>
+
+                    <div id="authMessage" class="form-message hidden"></div>
+
+                    <form id="loginForm" class="stacked-form">
+                        <label>
+                            <span>University ID</span>
+                            <input id="loginUniversityId" type="text" autocomplete="off" placeholder="2024-CS-229" required>
+                        </label>
+                        <label>
+                            <span>Password</span>
+                            <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+                        </label>
+                        <button class="primary-button" type="submit">Login</button>
+                    </form>
+
+                    <form id="registerForm" class="stacked-form hidden">
+                        <label>
+                            <span>University ID</span>
+                            <input id="regUniversityId" type="text" autocomplete="off" placeholder="2024-CS-229" required>
+                        </label>
+                        <label>
+                            <span>Full Name</span>
+                            <input id="regFullName" type="text" autocomplete="name" placeholder="Aayan Amir" required>
+                        </label>
+                        <label>
+                            <span>Email</span>
+                            <input id="regEmail" type="email" autocomplete="email" placeholder="student@example.com" required>
+                        </label>
+                        <label>
+                            <span>Password</span>
+                            <input id="regPassword" type="password" autocomplete="new-password" placeholder="Min 6 characters" required minlength="6">
+                        </label>
+                        <label>
+                            <span>Department</span>
+                            <select id="regDepartment" required>
+                                <option value="">Loading departments...</option>
+                            </select>
+                        </label>
+                        <label>
+                            <span>Semester</span>
+                            <select id="regSemester" required>
+                                <option value="">Select semester</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                            </select>
+                        </label>
+                        <button class="primary-button" type="submit">Register</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="appView" class="app-view hidden">
+                <div class="student-strip">
+                    <div>
+                        <span class="muted-label">Signed in as</span>
+                        <strong id="studentIdLabel"></strong>
+                    </div>
+                    <div>
+                        <span class="muted-label">Role</span>
+                        <strong id="roleLabel">Student</strong>
+                    </div>
+                    <div>
+                        <span class="muted-label">Borrowed</span>
+                        <strong id="borrowCountLabel">0 / 3</strong>
+                    </div>
+                </div>
+
+                <section id="issuePanel" class="view-panel active">
+                    <div class="work-grid">
+                        <article class="panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <p class="eyebrow">Book Issue</p>
+                                    <h2>Scan Book QR</h2>
+                                </div>
+                                <span id="scannerState" class="state-pill">Ready</span>
+                            </div>
+                            <div class="scanner-frame">
+                                <video id="scannerVideo" playsinline muted></video>
+                                <div id="scannerPlaceholder" class="scanner-placeholder">
+                                    <div class="scan-icon" aria-hidden="true"></div>
+                                    <p>Camera preview appears here.</p>
+                                </div>
+                                <div class="scan-corners" aria-hidden="true"></div>
+                            </div>
+                            <div class="scan-actions">
+                                <button id="startScanButton" class="primary-button" type="button">Scan QR</button>
+                                <button id="stopScanButton" class="secondary-button hidden" type="button">Stop Camera</button>
+                            </div>
+                            <form id="issueForm" class="stacked-form">
+                                <label>
+                                    <span>Book QR Code</span>
+                                    <input id="issueQrCodeId" type="text" autocomplete="off" placeholder="book-001" required>
+                                </label>
+                                <button class="primary-button" type="submit">Issue Book</button>
+                            </form>
+                        </article>
+
+                        <aside class="panel receipt-panel">
+                            <p class="eyebrow">Transaction Receipt</p>
+                            <h2 id="receiptTitle">Waiting for scan</h2>
+                            <p id="receiptMessage" class="muted">Scan a book QR code or enter it manually.</p>
+                            <dl class="receipt-list">
+                                <div><dt>Transaction ID</dt><dd id="receiptTransaction">-</dd></div>
+                                <div><dt>Issued</dt><dd id="receiptIssued">-</dd></div>
+                                <div><dt>Due Date</dt><dd id="receiptDue">-</dd></div>
+                            </dl>
+                        </aside>
+                    </div>
+                </section>
+
+                <section id="returnPanel" class="view-panel">
+                    <div class="work-grid">
+                        <article class="panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <p class="eyebrow">Book Return</p>
+                                    <h2>Scan QR to Return</h2>
+                                </div>
+                                <span id="returnScannerState" class="state-pill">Ready</span>
+                            </div>
+                            <div class="scanner-frame">
+                                <video id="returnScannerVideo" playsinline muted></video>
+                                <div id="returnScannerPlaceholder" class="scanner-placeholder">
+                                    <div class="scan-icon" aria-hidden="true"></div>
+                                    <p>Camera preview appears here.</p>
+                                </div>
+                                <div class="scan-corners" aria-hidden="true"></div>
+                            </div>
+                            <div class="scan-actions">
+                                <button id="returnStartScanButton" class="primary-button" type="button">Scan QR</button>
+                                <button id="returnStopScanButton" class="secondary-button hidden" type="button">Stop Camera</button>
+                            </div>
+                            <form id="returnForm" class="stacked-form">
+                                <label>
+                                    <span>Book QR Code</span>
+                                    <input id="returnQrCodeId" type="text" autocomplete="off" placeholder="book-001" required>
+                                </label>
+                                <button class="primary-button" type="submit">Return Book</button>
+                            </form>
+                        </article>
+                        <aside class="panel receipt-panel">
+                            <p class="eyebrow">Return Result</p>
+                            <h2 id="returnTitle">Ready</h2>
+                            <p id="returnMessage" class="muted">Scan a book QR code or enter it manually.</p>
+                            <dl class="receipt-list">
+                                <div><dt>Transaction ID</dt><dd id="returnTransaction">-</dd></div>
+                                <div><dt>Returned</dt><dd id="returnTime">-</dd></div>
+                                <div><dt>Fine</dt><dd id="returnFine">Rs. 0</dd></div>
+                            </dl>
+                        </aside>
+                    </div>
+                </section>
+
+                <section id="booksPanel" class="view-panel">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div><p class="eyebrow">My Books</p><h2>Currently Borrowed</h2></div>
+                            <button id="refreshBooksButton" class="secondary-button" type="button">Refresh</button>
+                        </div>
+                        <div id="booksList" class="item-list"></div>
+                    </div>
+                </section>
+
+                <section id="historyPanel" class="view-panel">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div><p class="eyebrow">History</p><h2>Transaction Records</h2></div>
+                            <button id="refreshHistoryButton" class="secondary-button" type="button">Refresh</button>
+                        </div>
+                        <div id="historyList" class="item-list"></div>
+                    </div>
+                </section>
+
+                <section id="finesPanel" class="view-panel">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div><p class="eyebrow">Fines and Alerts</p><h2>Student Notices</h2></div>
+                            <button id="refreshFinesButton" class="secondary-button" type="button">Refresh</button>
+                        </div>
+                        <div id="fineSummary" class="metric-strip"></div>
+                        <div id="finesList" class="item-list"></div>
+                        <div id="notificationsList" class="item-list split-top"></div>
+                    </div>
+                </section>
+
+                <section id="recommendationsPanel" class="view-panel">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div><p class="eyebrow">Rule-Based AI</p><h2>Recommended Books</h2></div>
+                            <button id="refreshRecommendationsButton" class="secondary-button" type="button">Refresh</button>
+                        </div>
+                        <div id="recommendationsList" class="item-list"></div>
+                    </div>
+                </section>
+
+                <section id="adminPanel" class="view-panel">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div><p class="eyebrow">Admin Dashboard</p><h2>Circulation Analytics</h2></div>
+                            <button id="refreshAdminButton" class="secondary-button" type="button">Refresh</button>
+                        </div>
+                        <div id="adminSummary" class="metric-grid"></div>
+                        <div id="adminAnalytics" class="analytics-grid"></div>
+                    </div>
+                    <div class="panel" style="margin-top:1.5rem">
+                        <div class="panel-heading">
+                            <div><p class="eyebrow">Administration</p><h2>Role Management</h2></div>
+                        </div>
+                        <form id="roleManagementForm" class="stacked-form" style="max-width: 400px;">
+                            <label>
+                                <span>University ID</span>
+                                <input id="roleTargetId" type="text" required placeholder="Enter student ID">
+                            </label>
+                            <label>
+                                <span>New Role</span>
+                                <select id="roleTargetSelect" required>
+                                    <option value="Student">Student</option>
+                                    <option value="Librarian">Librarian</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                            </label>
+                            <button type="submit" class="primary-button">Update Role</button>
+                            <p id="roleUpdateMessage" class="hidden" style="margin-top:0.5rem;font-size:0.9rem;"></p>
+                        </form>
+                    </div>
+                    <div class="panel" style="margin-top:1.5rem">
+                        <div class="panel-heading">
+                            <div><p class="eyebrow">Audit Trail</p><h2>Activity Logs</h2></div>
+                            <button id="refreshLogsButton" class="secondary-button" type="button">Refresh</button>
+                        </div>
+                        <div id="logsSummary" class="metric-strip"></div>
+                        <div id="logsList" class="item-list"></div>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="/app.js"></script>
+</body>
+</html>
