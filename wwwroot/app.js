@@ -256,7 +256,7 @@ async function loadNotificationsAndFines() {
             apiFetch("/api/students/me/notifications")
         ]);
 
-        finesSummary.innerHTML = `<div class="metric"><span>Outstanding Balance</span><strong>${formatMoney(fines.outstandingTotal)}</strong></div>`;
+        fineSummary.innerHTML = `<div class="metric"><span>Outstanding Balance</span><strong>${formatMoney(fines.outstandingTotal)}</strong></div>`;
         finesList.innerHTML = fines.fines.length ? fines.fines.map((fine) => {
             const isUnpaid = fine.status === "UNPAID";
             return `
@@ -344,6 +344,8 @@ async function loadAdminDashboard() {
         adminSummary.innerHTML = metrics.map(([label, value]) => `<div class="metric"><span>${label}</span><strong>${value}</strong></div>`).join("");
 
         const groups = [
+            ["Active Borrowers", analytics.activeBorrowers],
+            ["Fine Reports", analytics.fineReports],
             ["Most Active Students", analytics.mostActiveStudents],
             ["Popular Books (Most Borrowed)", analytics.popularBooks],
             ["Defaulters List", analytics.defaultersList],
@@ -550,7 +552,7 @@ $("#roleManagementForm").addEventListener("submit", async (event) => {
     msg.classList.remove("hidden");
 
     try {
-        const response = await apiFetch("/api/admin/roles", {
+        const response = await apiFetch("/api/admin/dashboard/roles", {
             method: "PUT",
             body: JSON.stringify({ universityId: targetId, newRole })
         });

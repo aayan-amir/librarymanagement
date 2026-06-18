@@ -15,4 +15,8 @@ public sealed class AnalyticsDashboardResponse
     public required IReadOnlyList<DashboardListItemDto> DefaultersList { get; init; }
 
     public required IReadOnlyList<DashboardListItemDto> DailyTransactions { get; init; }
+
+    public required IReadOnlyList<DashboardListItemDto> ActiveBorrowers { get; init; }
+
+    public required IReadOnlyList<DashboardListItemDto> FineReports { get; init; }
 }

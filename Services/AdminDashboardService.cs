@@ -135,6 +135,20 @@ public sealed class AdminDashboardService : IAdminDashboardService
                 group by date_trunc('day', issued_at)
                 order by date_trunc('day', issued_at) desc
                 limit 8;
+                """, null, cancellationToken),
+            ActiveBorrowers = await ReadItemsAsync(connection, """
+                select s.full_name, s.university_id, count(*)::numeric
+                from students s
+                join transactions t on t.student_id = s.student_id
+                where t.returned_at is null and t.transaction_status in ('ISSUED', 'OVERDUE')
+                group by s.full_name, s.university_id
+                order by count(*) desc, s.full_name
+                limit 8;
+                """, null, cancellationToken),
+            FineReports = await ReadItemsAsync(connection, """
+                select fine_status, 'Total Amount: Rs. ' || total_amount, fine_count::numeric
+                from vw_fine_reports
+                order by total_amount desc;
                 """, null, cancellationToken)
         };
     }
